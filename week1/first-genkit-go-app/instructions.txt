@@ -1,0 +1,2 @@
+$ curl -X POST https://week1-ido3ocn3pq-uc.a.run.app/callGemini15Pro -H "Content-Type: application/json" -d '{"data":"who are you?"}'
+$ curl -X POST https://week1-ido3ocn3pq-uc.a.run.app/callGemini15Flash -H "Content-Type: application/json" -d '{"data":"who are you?"}'
