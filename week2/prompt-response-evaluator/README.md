@@ -2,4 +2,5 @@ This is a Google Sheet Add-on that allow you to invoke the Gemini Flash and Gemi
 
 If you’d like access to this sheet, make a copy [here](https://docs.google.com/spreadsheets/d/1JHI8ReDMSZsfKlm1DJRSXnUHUI-ZVirWjjCaL9DWPeI/copy).
 
-Here's the application![image](GoogleSheet-Prompt-Response-Evaluator.png)
+Here's the application: 
+![image](GoogleSheet-Prompt-Response-Evaluator.png)
