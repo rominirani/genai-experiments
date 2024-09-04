@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>My Chat App</title>
+	<style>
+		body {
+			font-family: sans-serif;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			height: 100vh;
+			margin: 0;
+			background-color: #f4f4f4;
+		}
+
+		h1 {
+			color: #333;
+		}
+
+		form {
+			display: flex;
+			flex-direction: column;
+			width: 90%; /* Occupy most of the screen width */
+			padding: 20px;
+			border-radius: 8px;
+			background-color: #fff;
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+		}
+
+		textarea {
+			padding: 10px;
+			margin-bottom: 10px;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+			resize: vertical;
+		}
+
+		button {
+			padding: 10px 20px;
+			border: none;
+			border-radius: 4px;
+			background-color: #007bff;
+			color: #fff;
+			cursor: pointer;
+		}
+
+		button:hover {
+			background-color: #0056b3;
+		}
+
+		#chat-container { 
+			width: 90%; /* Occupy most of the screen width */
+			margin-top: 20px;
+		}
+
+		#chat-header {
+			background-color: #f0f0f0;
+			padding: 10px;
+			border-bottom: 1px solid #ccc;
+			text-align: left;
+			font-weight: bold;
+		}
+
+		#chatbox {
+			padding: 10px;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+			background-color: #f9f9f9;
+			height: 300px;
+			overflow-y: scroll;
+			display: flex;
+			flex-direction: column-reverse; /* Reverse message order */
+		}
+
+		.message {
+			margin-bottom: 10px;
+			padding: 8px;
+			border-radius: 4px;
+			align-self: flex-start; /* Align messages to the left */
+		}
+
+		.user {
+			background-color: #e9f5ff;
+		}
+
+		.bot {
+			background-color: #f0f0f0;
+		}
+	</style>
+</head>
+<body>
+	<h1>My Chat App</h1>
+	<form method="POST" action="/chat">
+		<textarea id="prompt" name="prompt" rows="5" cols="50" placeholder="Enter your prompt here..."></textarea><br>
+		<button type="submit">Send</button>
+	</form>
+
+	<div id="chat-container">
+		<div id="chat-header">Chat History</div>
+		<div id="chatbox"></div>
+	</div>
+
+	<script>
+		const form = document.querySelector('form');
+		const chatbox = document.getElementById('chatbox');
+
+		form.addEventListener('submit', (event) => {
+			event.preventDefault(); 
+
+			const promptValue = form.prompt.value;
+			const timestamp = new Date().toLocaleTimeString();
+
+			// Display user message
+			const userMessage = document.createElement('div');
+			userMessage.classList.add('message', 'user');
+			userMessage.innerHTML = `<strong>User:</strong> ${promptValue} <br> <small>Sent at: ${timestamp}</small>`;
+			chatbox.prepend(userMessage); // Add new messages to the top
+
+			fetch('/chat', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded'
+				},
+				body: `prompt=${encodeURIComponent(promptValue)}`
+			})
+			.then(response => response.json())
+			.then(data => {
+				const responseTimestamp = new Date().toLocaleTimeString();
+				// Display bot response
+				const botMessage = document.createElement('div');
+				botMessage.classList.add('message', 'bot');
+				botMessage.innerHTML = `<strong>Bot:</strong> ${data.response} <br> <small>Received at: ${responseTimestamp}</small>`;
+				chatbox.prepend(botMessage); // Add new messages to the top
+
+				// No need to scroll to bottom, as new messages are added to the top
+			});
+		});
+	</script>
+</body>
+</html>
