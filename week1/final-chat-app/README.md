@@ -4,5 +4,5 @@ Go Web application that interacts with the Genkit Go Flash 1.5 Model Flow deploy
 
 Start the server locally via the `main.go` file. 
 
-Here's the application![image](./img/cloud-run-url.png)
+Here's the application![image](Chat-Travel-App-Screenshot.png)
 
