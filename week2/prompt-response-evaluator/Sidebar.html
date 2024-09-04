@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #1E1E1E;
+        color: #FFFFFF;
+        padding: 16px;
+      }
+      label {
+        display: block;
+        margin-top: 20px;
+        font-size: 14px;
+      }
+      select, input[type="range"], input[type="text"], button {
+        width: 100%;
+        padding: 8px;
+        margin-top: 8px;
+        background-color: #333333;
+        color: #FFFFFF;
+        border: none;
+        border-radius: 4px;
+      }
+      button {
+        background-color: #3F51B5;
+        cursor: pointer;
+        font-weight: bold;
+        margin-top: 20px;
+      }
+      button:hover {
+        background-color: #5C6BC0;
+      }
+      .slider-container {
+        display: flex;
+        align-items: center;
+        margin-top: 8px;
+      }
+      .slider-value {
+        margin-left: 10px;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <label for="model1">Select Model 1:</label>
+      <select id="model1">
+        <option value="" disabled selected>Select a model</option>
+        <option value="gemini-1.5-flash">Gemini 1.5 Flash</option>
+        <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
+        <!-- Add more models as needed -->
+      </select>
+    </div>
+    <div>
+      <label for="model2">Select Model 2:</label>
+      <select id="model2">
+        <option value="" disabled selected>Select a model</option>
+        <option value="gemini-1.5-flash">Gemini 1.5 Flash</option>
+        <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
+        <!-- Add more models as needed -->
+      </select>
+    </div>
+    <div>
+      <label for="range">Range of Prompts (e.g., A1:A10):</label>
+      <input type="text" id="range" placeholder="A1:A10">
+    </div>
+    <div>
+      <label for="temperature">Temperature:</label>
+      <div class="slider-container">
+        <input type="range" id="temperature" min="0" max="1" step="0.01" value="0.7">
+        <span class="slider-value" id="temperatureValue">0.7</span>
+      </div>
+    </div>
+    <div>
+      <button onclick="runModelProcessing()">Run</button>
+    </div>
+
+    <script>
+      document.getElementById('temperature').addEventListener('input', function() {
+        document.getElementById('temperatureValue').textContent = this.value;
+      });
+
+      // Periodically check for the selected range in the sheet
+      /*
+      setInterval(function() {
+        google.script.run.withSuccessHandler(function(range) {
+          document.getElementById('range').value = range;
+        }).getSelectedRange();
+      }, 1000); // Check every second
+      */
+
+      function runModelProcessing() {
+        const model1 = document.getElementById('model1').value;
+        const model2 = document.getElementById('model2').value;
+        const range = document.getElementById('range').value;
+        const temperature = parseFloat(document.getElementById('temperature').value);
+
+        google.script.run.runModelProcessing(model1, model2, range, temperature);
+      }
+    </script>
+  </body>
+</html>
