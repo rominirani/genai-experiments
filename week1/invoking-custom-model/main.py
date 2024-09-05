@@ -48,8 +48,8 @@ def predict_custom_trained_model_sample(
         print(" prediction:", prediction)
 
 predict_custom_trained_model_sample(
-    project="963355964121",
-    endpoint_id="780358586604716032",
+    project="Your Project Id",
+    endpoint_id="Your Deployed Model Endpoint Id",
     location="us-west1",
     instances=[{"prompt": "What's the capital of India and tell me more about the city?", "max_tokens": 1000}]
 )
