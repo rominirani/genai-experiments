@@ -16,7 +16,7 @@ import (
 
 func main() {
 
-	GCLOUD_PROJECT := "gcp-experiments-349209"
+	GCLOUD_PROJECT := "Your-Google-Cloud-Project-ID"
 	GCLOUD_LOCATION := "us-central1"
 
 	ctx := context.Background()
@@ -37,7 +37,10 @@ func main() {
 	// after all of your plug-in configuration and flow definitions. When you
 	// pass a nil configuration to Init, Genkit starts a local flow server,
 	// which you can interact with using the developer UI.
+
+	//The line below is good enough to deploy to Cloud Run from source.
 	if err := genkit.Init(ctx, &genkit.Options{FlowAddr: ":3400"}); err != nil {
+		//To start a local server, uncomment the line below and comment the one above
 		//if err := genkit.Init(ctx, nil); err != nil {
 		log.Fatal(err)
 	}
