@@ -55,12 +55,11 @@ func callModel(modelName string) func(ctx context.Context, prompt string) (strin
 			return "", errors.New("callGemini15Flash: failed to find model")
 		}
 
-		// Construct a request and send it to the model API.
-		resp, err := m.Generate(ctx,
-			ai.NewGenerateRequest(
-				&ai.GenerationCommonConfig{Temperature: 1},
-				ai.NewUserTextMessage(fmt.Sprintf(`Please answer this query: %s `, prompt))),
-			nil)
+		resp, err := ai.Generate(ctx, m,
+			ai.WithTextPrompt(prompt),
+			ai.WithConfig(ai.GenerationCommonConfig{Temperature: 1, MaxOutputTokens: 300}),
+			ai.WithSystemPrompt("You are a helpful Travel assistant. Please assist the users with your expert Travel knowledge. Please great the user and be polite every time. Do not answer any question that is not related to travel. Politely refuse any non-travel related question or follow up."))
+
 		if err != nil {
 			return "", err
 		}
@@ -74,3 +73,4 @@ func callModel(modelName string) func(ctx context.Context, prompt string) (strin
 		return text, nil
 	}
 }
+
