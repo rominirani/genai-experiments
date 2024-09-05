@@ -12,7 +12,7 @@ import (
 
 // Your AI/LLM logic or API calls would go here
 func getResponseFromPrompt(prompt string) (string, error) {
-	url := "https://week1-ido3ocn3pq-uc.a.run.app/callGemini15Flash" // Replace with the actual URL
+	url := "https://Your-Cloud-Run-Base-URL/callGemini15Flash" // Replace with the actual URL
 
 	// Create the JSON data
 	jsonData := map[string]string{"data": prompt}
