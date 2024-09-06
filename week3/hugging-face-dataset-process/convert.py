@@ -11,6 +11,25 @@ def get_dataset_details(dataset_name):
     print(dataset_train.shape)
     print(dataset_train.column_names)
 
+def convert_evaluation_data_to_jsonl(hf_csv_file):
+    train_df = pd.read_csv(hf_csv_file)
+    for df, filename in [(train_df, "eval.jsonl")]:
+        columns_to_keep = ["prompt", "output"]
+        df = df[columns_to_keep]
+
+        formatted_data = []
+        for index, row in df.iterrows():
+            formatted_data.append({
+                "input_text": row["prompt"],
+                "output_text": row["output"]
+            })
+
+        with open(filename, "w") as f:
+            for item in formatted_data:
+                f.write(json.dumps(item) + "\n")
+
+        print(f"File {filename} converted to JSONL")
+
 def convert_and_split_to_jsonl(hf_csv_file):
     # Load the data
     df = pd.read_csv(hf_csv_file)
@@ -43,3 +62,4 @@ def convert_and_split_to_jsonl(hf_csv_file):
 if __name__ == "__main__":
     #get_dataset_details("cyberblip/Travel_india")
     convert_and_split_to_jsonl("hf://datasets/cyberblip/Travel_india/TRAIN.csv")
+    #convert_evaluation_data_to_jsonl("hf://datasets/cyberblip/Travel_india/TRAIN.csv")
