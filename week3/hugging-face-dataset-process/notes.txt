@@ -1,0 +1,5 @@
+Following JSONL files have been uploaded to cloud storage:
+gs://l200-training-data/train.jsonl
+gs://l200-training-data/validation.jsonl
+
+
