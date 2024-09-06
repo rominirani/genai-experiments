@@ -1,37 +1,3 @@
-// Copyright 2024 Google LLC
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// This program can be manually tested like so:
-//
-// In development mode (with the environment variable GENKIT_ENV="dev"):
-// Start the server listening on port 3100:
-//
-//	go run . &
-//
-// Tell it to run a flow:
-//
-//	curl -d '{"key":"/flow/simpleQaFlow/simpleQaFlow", "input":{"start": {"input":{"question": "What is the capital of UK?"}}}}' http://localhost:3100/api/runAction
-//
-// In production mode (GENKIT_ENV missing or set to "prod"):
-// Start the server listening on port 3400:
-//
-//	go run . &
-//
-// Tell it to run a flow:
-//
-//   curl -d '{"question": "What is the capital of UK?"}' http://localhost:3400/simpleQaFlow
-
 package main
 
 import (
