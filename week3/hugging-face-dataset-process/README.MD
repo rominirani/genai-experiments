@@ -31,10 +31,3 @@ This will create two files:
 
   - `train.jsonl`: Contains the training data in JSONL format.
   - `validation.jsonl`: Contains the validation data in JSONL format.
-
-## Example
-
-To convert the `cyberblip/Travel_india` dataset, you would use the following command:
-
-`python convert.py`
-This assumes that the hf_csv_file variable in the script has been updated to point to the correct file path for the `cyberblip/Travel_india` dataset.
