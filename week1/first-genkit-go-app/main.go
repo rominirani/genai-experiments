@@ -18,7 +18,7 @@ import (
 
 func main() {
 
-	GCLOUD_PROJECT := "gcp-experiments-349209"
+	GCLOUD_PROJECT := "Your-Google-Cloud-Project"
 	GCLOUD_LOCATION := "us-central1"
 
 	ctx := context.Background()
