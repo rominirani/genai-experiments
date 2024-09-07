@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"errors"
-	"fmt"
 	"log"
 
 	// Import the Genkit core libraries.
@@ -12,14 +11,25 @@ import (
 
 	// Import the Google Cloud Vertex AI plugin.
 	"github.com/firebase/genkit/go/plugins/vertexai"
+
+	//Import the Google Cloud plugins
+	"github.com/firebase/genkit/go/plugins/googlecloud"
 )
 
 func main() {
 
-	GCLOUD_PROJECT := "Your-Google-Cloud-Project-ID"
+	GCLOUD_PROJECT := "gcp-experiments-349209"
 	GCLOUD_LOCATION := "us-central1"
 
 	ctx := context.Background()
+
+	//Initialize Google Cloud so that we have Logging, Monitoring, Trace
+	if err := googlecloud.Init(
+		ctx,
+		googlecloud.Config{ProjectID: GCLOUD_PROJECT, ForceExport: true},
+	); err != nil {
+		log.Fatal(err)
+	}
 
 	// Initialize the Vertex AI plugin. When you pass an empty string for the
 	// projectID parameter, the Vertex AI plugin will use the value from the
@@ -37,10 +47,7 @@ func main() {
 	// after all of your plug-in configuration and flow definitions. When you
 	// pass a nil configuration to Init, Genkit starts a local flow server,
 	// which you can interact with using the developer UI.
-
-	//The line below is good enough to deploy to Cloud Run from source.
 	if err := genkit.Init(ctx, &genkit.Options{FlowAddr: ":3400"}); err != nil {
-		//To start a local server, uncomment the line below and comment the one above
 		//if err := genkit.Init(ctx, nil); err != nil {
 		log.Fatal(err)
 	}
@@ -73,4 +80,3 @@ func callModel(modelName string) func(ctx context.Context, prompt string) (strin
 		return text, nil
 	}
 }
-
