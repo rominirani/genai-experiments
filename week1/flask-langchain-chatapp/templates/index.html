@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Travel Agent Chatbot</title>
+	<script src="https://cdn.tailwindcss.com"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">   
+
+</head>
+<body class="bg-gray-100 flex flex-col h-screen">
+	<div class="bg-gray-800 text-white p-4">
+		<div class="container mx-auto flex justify-between items-center">
+			<h1 class="text-2xl font-bold">Travel Agent Chatbot</h1>
+			<div>
+				<span id="username" class="mr-4">Welcome, {{ session.get('username', 'Guest') }}!</span> 
+				<a href="/logout" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Logout</a>
+			</div>
+		</div>
+	</div>
+	<div class="flex-grow p-6">
+		<div id="chat-container" class="bg-white p-4 rounded-lg shadow-md h-96 overflow-y-auto mb-4">
+			{% for message in chat_history %}
+				{% if message['sender'] == 'user' %}
+					<div class="flex items-start mb-4">
+						<i class="fas fa-user text-blue-500 text-xl mr-2"></i>
+						<p class="bg-blue-100 text-blue-800 text-sm p-2 rounded-lg">{{ message['message'] }}</p>
+					</div>
+				{% elif message['sender'] == 'bot' %}
+					<div class="flex items-start mb-4">
+						<i class="fas fa-robot text-gray-500 text-xl mr-2"></i>
+						<p class="bg-gray-100 text-gray-800 text-sm p-2 rounded-lg">{{ message['message'] }}</p>
+					</div>
+				{% endif %}
+			{% endfor %}
+		</div>
+		<div class="flex">
+			<input type="text" id="user-input" class="flex-grow border border-gray-300 rounded-l-lg p-2 focus:outline-none focus:border-blue-500" placeholder="Type your message...">
+			<button onclick="sendMessage()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-r-lg">
+				<i class="fas fa-paper-plane"></i> Send
+			</button>
+			<button id="clearButton" class="ml-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg">
+				<i class="fas fa-trash"></i> Clear
+			</button>
+		</div>
+	</div>
+
+
+	
+	<script>
+		// Function to show a toast message
+		function showToast(message) {
+		// You'll need to implement your own toast logic here
+		// This is a simple example using an alert, but you can use a library or custom HTML/CSS
+		alert(message); 
+		}
+
+			// Add a click event listener to the clear button (assuming you have a button with the ID "clearButton")
+		document.getElementById('clearButton').addEventListener('click', () => {
+			if (confirm("Are you sure you want to clear the chat history?")) {
+				// User confirmed, make the POST request to /clear_chat
+				fetch('/clear_chat', {
+					method: 'POST'
+				})
+				.then(response => response.json())
+				.then(data => {
+					// Display the success message from the server
+					showToast(data.message); 
+
+					let chatContainer = document.getElementById('chat-container');
+					// Clear the chat display area in the UI
+					chatContainer.innerHTML = ''; 
+				})
+				.catch(error => {
+					console.error('Error clearing chat:', error);
+					// Handle errors, e.g., display an error toast
+					showToast('An error occurred while clearing the chat.');
+				});
+			} 
+		});
+
+		function sendMessage() {
+			let message = document.getElementById('user-input').value.trim();
+			if (message === "") {
+				alert("Please enter a message.");
+				return;
+			}
+			document.getElementById('user-input').value = '';
+
+			let chatContainer = document.getElementById('chat-container');
+			chatContainer.innerHTML += `
+				<div class="flex items-start mb-4">
+					<i class="fas fa-user text-blue-500 text-xl mr-2"></i>
+					<p class="bg-blue-100 text-blue-800 text-sm p-2 rounded-lg">${message}</p>
+				</div>
+			`;
+
+			// Show loading indicator
+			chatContainer.innerHTML += `
+				<div class="flex items-start mb-4"  id="loading-indicator">
+					<i class="fas fa-robot text-gray-500 text-xl mr-2"></i>
+					<div class="animate-pulse bg-gray-200 h-6 w-24 rounded-lg"></div>
+				</div>
+			`;
+
+			fetch('/chat', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ message: message })
+			})
+			.then(response => response.json())
+			.then(data => {
+				//remove loading indicator
+				let loadingIndicator = document.getElementById('loading-indicator');
+				if (loadingIndicator) {
+					loadingIndicator.remove(); 
+				}
+				// Check if there's an error in the response
+				if (data.error) {
+					chatContainer.innerHTML += `
+						<div class="flex items-start mb-4">
+							<i class="fas fa-robot text-red-500 text-xl mr-2"></i>
+							<p class="bg-red-100 text-red-800 text-sm p-2 rounded-lg">Error: ${data.error}</p>
+						</div>
+					`;
+				} else {
+					chatContainer.innerHTML += `
+						<div class="flex items-start mb-4">
+							<i class="fas fa-robot text-gray-500 text-xl mr-2"></i>
+							<p class="bg-gray-100 text-gray-800 text-sm p-2 rounded-lg">${data.response}</p>
+						</div>
+					`;
+				}
+
+				chatContainer.scrollTop = chatContainer.scrollHeight;
+			})
+			.catch(error => {
+				//remove loading indicator
+				let loadingIndicator = document.getElementById('loading-indicator');
+				if (loadingIndicator) {
+					loadingIndicator.remove(); 
+				}
+
+				chatContainer.innerHTML += `
+					<div class="flex items-start mb-4">
+						<i class="fas fa-robot text-red-500 text-xl mr-2"></i>
+						<p class="bg-red-100 text-red-800 text-sm p-2 rounded-lg">Error: ${error.message}</p>
+					</div>
+				`;
+				console.error('Error:', error);
+			});
+		}
+	</script>
+</body>
+</html>
+
