@@ -2,3 +2,4 @@ google-cloud-aiplatform
 langchain
 langchain-google-vertexai
 pandas
+deepeval
