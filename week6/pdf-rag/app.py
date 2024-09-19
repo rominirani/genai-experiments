@@ -1,6 +1,5 @@
 from vertexai.preview import rag
 from vertexai.preview.generative_models import GenerativeModel, Tool
-import vertexai
 
 # Create a RAG Corpus, Import Files, and Generate a response
 CORPUS_NAME = "projects/YOUR-PROJECT-ID/locations/us-central1/ragCorpora/YOUR-CORPUS-ID"
