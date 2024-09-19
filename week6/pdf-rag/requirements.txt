@@ -1,2 +1,5 @@
 google-cloud-aiplatform
 google-cloud-storage
+deepeval
+langchain
+langchain-google-vertexai
